@@ -33,7 +33,7 @@ export const TicketList = () => {
   }, [showEmergencyOnly, allTickets])
 
 
-  // 
+  // filter tickets
   useEffect(() => {
     const foundTickets = filteredTickets.filter((ticket) => ticket.description.toLowerCase().includes(searchInput.toLowerCase()))
     setDisplayedTickets(foundTickets)
@@ -53,6 +53,8 @@ export const TicketList = () => {
     </div>
   )
 }
+
+
 
 
 

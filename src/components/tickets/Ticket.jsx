@@ -41,4 +41,5 @@ export const Ticket = ({ticket}) => {
               </footer>
             </section>
     )
+    
 }
