@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getEmployeesById } from "../../services/employeeService.jsx";
 import { useParams } from "react-router-dom";
 
+
+
 export const EmployeeDetails = () => {
     const [employee, setEmployee] = useState({})
     const [ticketCount, setTicketCount] = useState(0)

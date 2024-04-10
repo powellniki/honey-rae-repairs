@@ -18,7 +18,7 @@ export const CustomerList = () => {
 
 
     return (
-        <div className="customers">
+        <div className="customers" key="customer-list">
             {customers.map(customerObj => {
                 return (
                     <Link to={`/customers/${customerObj.id}`}>

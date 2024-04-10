@@ -7,15 +7,16 @@ import { Link } from "react-router-dom";
 export const EmployeeList = () => {
     const [employees, setEmployees] = useState([])
 
+
     useEffect(() => {
-        {getAllEmployees().then(allEmployees => {
-            setEmployees(allEmployees)
-            console.log("employees set")
-        })}
+        getAllEmployees().then(allEmployees => {
+        setEmployees(allEmployees)
+        })
     },[])
 
+
     return (
-        <div className="employees">
+        <div className="employees" key="employee-list">
             {employees.map(employeeObj => {
                 return (
                     <Link to={`/employees/${employeeObj.id}`}>
