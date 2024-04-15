@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getAllEmployees } from "../../services/employeeService.jsx"
-import { assignTicket, updateTicket } from "../../services/ticketService.jsx"
+import { assignTicket, deleteTicket, updateTicket } from "../../services/ticketService.jsx"
 
 
 
@@ -61,6 +61,14 @@ export const Ticket = ({ticket, currentUser, getAndSetTickets }) => {
     }
 
 
+    const handleDelete = (ticketId) => {
+        deleteTicket(ticketId).then(() => {
+            getAndSetTickets()
+            console.log('ticket deleted')
+        })
+    }
+
+
 
     return (
         <section className="ticket">
@@ -76,6 +84,7 @@ export const Ticket = ({ticket, currentUser, getAndSetTickets }) => {
                   <div>{ticket.emergency ? "yes" : "no"}</div>
                 </div>
                 <div className="btn-container">
+
                     {/*  if the logged in user is an emploee, and theres no employee ticket associated with 
                     the service ticket, then button to claim ticket should display */}
                     {currentUser.isStaff && !assignedEmployee ? <button onClick={handleClaim} className="btn btn-secondary">Claim</button> : ""}
@@ -83,6 +92,11 @@ export const Ticket = ({ticket, currentUser, getAndSetTickets }) => {
                     {/* if the logged in user is the assigned employee for the ticket and there is no date completed,
                     then a button to close the ticket should display */}
                     {assignedEmployee?.userId === currentUser.id && !ticket.dateCompleted ? <button onClick={handleClose} className="btn btn-warning">Close</button> : ""}
+
+                    {/* if the logged in user is a customer, and is the author of the ticket,
+                    then we want a delete button to render with the ability to delete the ticket from the database */}
+                    {currentUser.isStaff === false && currentUser.id === ticket.userId ? <button onClick={() => {handleDelete(ticket.id)}} className="btn btn-warning">DELETE</button> : ""}
+
                 </div>
               </footer>
             </section>
