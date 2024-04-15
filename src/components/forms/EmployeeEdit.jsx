@@ -72,6 +72,7 @@ export const EmployeeForm = ({currentUser}) => {
                         />
                 </div>
             </fieldset>
+            
             <fieldset>
                 <div className="form-group">
                     <button 

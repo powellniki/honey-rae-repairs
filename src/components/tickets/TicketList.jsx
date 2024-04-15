@@ -9,6 +9,7 @@ import { FilterBar } from "./FilterBar.jsx"
 export const TicketList = ({currentUser}) => {
   const [allTickets, setAllTickets] = useState([])
   const [showEmergencyOnly, setShowEmergencyOnly] = useState(false)
+  const [openTicketsOnly, setOpenTicketsOnly] = useState(false)
   const [filteredTickets, setFilteredTickets] = useState([])
   const [searchInput, setSearchInput] = useState("")
   const [displayedTickets, setDisplayedTickets] = useState([])
@@ -19,14 +20,18 @@ export const TicketList = ({currentUser}) => {
   
   const getAndSetTickets = () => {
     getAllTickets().then(ticketArray => {
-      setAllTickets(ticketArray)
-      console.log("tickets set")
+      if (currentUser.isStaff) {
+        setAllTickets(ticketArray)
+      } else {
+        const customerTickets = ticketArray.filter(ticket => ticket.userId === currentUser.id)
+        setAllTickets(customerTickets)
+      }
     })
   }
 
   useEffect(() => {
     getAndSetTickets()
-  }, [])
+  }, [currentUser])
 
 
   useEffect(() => {
@@ -39,7 +44,18 @@ export const TicketList = ({currentUser}) => {
   }, [showEmergencyOnly, allTickets])
 
 
-  // filter tickets
+  useEffect(() => {
+     if (openTicketsOnly) {
+      const openTickets = allTickets.filter(ticket => ticket.dateCompleted === "")
+      setFilteredTickets(openTickets)
+     } else {
+      setFilteredTickets(allTickets)
+     }
+  }, [openTicketsOnly, allTickets])
+
+
+
+  // filter tickets with search input
   useEffect(() => {
     const foundTickets = filteredTickets.filter((ticket) => ticket.description.toLowerCase().includes(searchInput.toLowerCase()))
     setDisplayedTickets(foundTickets)
@@ -50,7 +66,7 @@ export const TicketList = ({currentUser}) => {
   return (
     <div className="tickets-container">
       <h2>Tickets</h2>
-      <FilterBar setShowEmergencyOnly={setShowEmergencyOnly} setSearchInput={setSearchInput} />
+      <FilterBar setShowEmergencyOnly={setShowEmergencyOnly} setSearchInput={setSearchInput} setOpenTicketsOnly={setOpenTicketsOnly} currentUser={currentUser}/>
       <article className="tickets">
         {displayedTickets.map(ticketObj => {
           return <Ticket ticket={ticketObj} currentUser={currentUser} getAndSetTickets={getAndSetTickets} key={ticketObj.id}/>
